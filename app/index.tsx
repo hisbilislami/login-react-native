@@ -7,16 +7,16 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  /* SafeAreaView, */
 } from "react-native";
 import * as SQLite from "expo-sqlite";
-import React, { useState, useEffect } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Octicons from "@expo/vector-icons/Octicons";
 import Waves1 from "@/components/Waves1";
-import Waves2 from "@/components/Waves2";
-import Waves3 from "@/components/Waves3";
 import { drizzle } from "drizzle-orm/expo-sqlite";
 import { usersTable } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
+import { useState } from "react";
 
 const expo = SQLite.openDatabaseSync("db.db");
 const db = drizzle(expo);
@@ -64,18 +64,16 @@ const App = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
-      keyboardVerticalOffset={0}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View
-          className={`flex-1 bg-hot-pink justify-center items-center px-[15%]`}
-        >
-          <View className="flex-col h-[45%] justify-between items-center w-full">
+    <SafeAreaView className="flex-1 bg-hot-pink">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View className={`flex-1 gap-16 justify-end items-center px-[15%]`}>
             <View className="flex-col justify-center items-center w-full">
-              <Text className="text-light-gray text-4xl font-extrabold tracking-wide">
+              <Text className="text-light-gray text-4xl font-extrabold tracking-[5px]">
                 LOGIN
               </Text>
               <Text className="text-light-gray text-md font-extrabold tracking-[10px]">
@@ -116,13 +114,12 @@ const App = () => {
               </View>
             </View>
           </View>
-
-          <Waves1 />
-          <Waves2 />
-          <Waves3 />
-        </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+      <View className="fixed bottom-[-50] left-0 right-0 h-[300px]">
+        <Waves1 />
+      </View>
+    </SafeAreaView>
   );
 };
 
